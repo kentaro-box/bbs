@@ -1,6 +1,5 @@
 <?php  
 session_start();
-if (empty($_SESSION['user_id'])) {
 
 
 if (isset($_POST['registration'])) {
@@ -31,8 +30,8 @@ if (isset($_POST['registration'])) {
 	} catch (Exception $e) {
 		echo $e->getMessage();
 	}
-}
 
+} 
 if (isset($_SESSION['user_id'])){
 	header('Location: index.php');
 }else{
@@ -51,30 +50,26 @@ if (isset($_SESSION['user_id'])){
 		$stmt = $db->prepare("
 			SELECT * FROM user WHERE name=:name AND password=:password
 			");
-		$stmt->bindParam(':name',$_POST['name'], PDO::PARAM_STR);
-		$stmt->bindParam(':password',$_POST['password'],PDO::PARAM_STR);
+		$stmt->bindParam(':name',$loginName, PDO::PARAM_STR);
+		$stmt->bindParam(':password',$password,PDO::PARAM_STR);
 
 		$stmt->execute();
 
 		if ($row = $stmt->fetch()){
 			$_SESSION['user_id'] = $row['user_id'];
-			// header('Location: index.php');
-			// exit();
+			header('Location: index.php');
+			exit();
 		} 
 	} catch (Exception $e) {
 		echo $e->getMessage();
 	}
 
-} else {
-	// header('Location: login.php');
-	// exit();
-}
+} 
+	
 }
 
-} else {
-	// header('Location: index.php');
-	// exit();
-}
+
+
 
 
 ?>
