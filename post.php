@@ -1,18 +1,15 @@
 <?php 
-
+session_start();
+if (!isset($_SESSION['user_id'])){
+	header('Location: login.php');
+}
 
 
  ?>
- <!DOCTYPE html>
- <html>
- <head>
- 	<title>投稿する</title>
- </head>
- <body>
+
  <?php require('header.php'); ?>
  	<form action="write.php" method="post">
- 		<p>名前</p>
- 		<p><input type="text" name="name"></p>
+ 		
  		<p>タイトル</p>
  		<p><input type="text" name="title"></p>
  		<p>本文</p>
