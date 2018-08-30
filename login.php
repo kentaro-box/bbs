@@ -73,12 +73,7 @@ if (isset($_SESSION['user_id'])){
 
 
 ?>
-<!DOCTYPE html>
-<html>
-<head>
-	<title>ログイン</title>
-</head>
-<body>
+
 	<?php require('header.php'); ?>
 <div class="login-area">
 	<div class="login">
@@ -86,7 +81,7 @@ if (isset($_SESSION['user_id'])){
 			<p>お名前</p>
 			<p><input type="text" name="login-name"></p>
 			<p>パスワード</p>
-			<p><input type="pass" name="password"></p>
+			<p><input type="password" name="password"></p>
 			<p>ログイン</p>
 			<p><input type="submit" name="login"></p>
 		</form>
@@ -98,7 +93,7 @@ if (isset($_SESSION['user_id'])){
 			<p>メールアドレス</p>
 			<p><input type="text" name="mail"></p>
 			<p>パスワード</p>
-			<p><input type="pass" name="password"></p>
+			<p><input type="password" name="password"></p>
 			<p>登録</p>
 			<p><input type="submit" name="registration"></p>
 		</form>
