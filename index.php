@@ -1,8 +1,11 @@
 <?php 
 session_start();
+ini_set( 'display_errors', 1 );
+
 if (!isset($_SESSION['user_id'])){
 	header('Location: login.php');
 }
+
 	$dsn = 'mysql:host=localhost;dbname=bbs;charset=utf8';
 	$user = 'root';
 	$pass = 'root';
@@ -19,6 +22,7 @@ if (!isset($_SESSION['user_id'])){
 			posts.date
 			FROM 
 			user INNER JOIN posts ON user.user_id = posts.user_id
+			ORDER BY posts.post_id DESC;
 			");
 		$stmt->bindParam(':name',$name, PDO::PARAM_STR);
 		$stmt->bindParam(':title',$title,PDO::PARAM_STR);
@@ -35,20 +39,21 @@ if (!isset($_SESSION['user_id'])){
  
  
  	<?php require('header.php'); ?>
- <h1>投稿一覧</h1>
+ <h1 class="post-title">投稿一覧</h1>
 <?php while ($row = $stmt->fetch()):
 			$title = $row['title'] ? $row['title'] : '(無題)';
 ?>
 <div class="post-colum">
 <p>名前</p>
-<p><?php echo $row['name']; ?></p>
+<p class="stand-out"><?php echo $row['name']; ?></p>
 <p>タイトル</p>
-<p><?php echo $title; ?></p>
+<p class="stand-out"><?php echo $title; ?></p>
 <p>投稿日</p>
-<p><?php echo $row['date'] ;?></p>
+<p class="stand-out"><?php echo $row['date'] ;?></p>
 <p>投稿文</p>
-<p><?php echo nl2br($row['body']);?></p>
+<p class="stand-out"><?php echo nl2br($row['body']);?></p>
 </div>
 <?php endwhile; ?>
+
  </body>
  </html>
