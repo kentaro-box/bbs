@@ -68,29 +68,44 @@ if (filter_input(INPUT_POST, 'login-name') && filter_input(INPUT_POST, 'mail') &
 	$user = 'root';
 	$pass = 'root';
 
-	// try {
-	// 	$db = new PDO($dsn, $user, $pass);
-	// 	$db->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
-	// 	$stmt = $db->prepare("
-	// 		SELECT
-	// 		name
-	// 		FROM 
-	// 		user
-	// 		");
-	// 	$stmt->bindParam(':name',$name, PDO::PARAM_STR);
+	try {
+		$db = new PDO($dsn, $user, $pass);
+		$db->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
+		$stmt = $db->prepare("
+			SELECT
+			name
+			FROM 
+			user WHERE name=:name
+			");
+		$stmt->bindParam(':name',$name, PDO::PARAM_STR);
 		
-	// 	$stmt->execute();
-	// 	while ($row = $stmt->fetch()){
-	// 		$row['name'] = $samename;
-			
-	// 	}
+		$stmt->execute();
+		$samename = filter_input(INPUT_POST, 'login-name');
+		while ($row = $stmt->fetch()){
+			if ($samename === $row['name']) {
+				$error = "すでに登録済みの名前です。";
+
+				// header('Location: login.php');
+				// exit();
+			}else {
+
+
+			}
+		}
 		
-	// } catch (Exception $e) {
-	// 	echo $e->getMessage();
-	// }
+	} catch (Exception $e) {
+		echo $e->getMessage();
+	}
 
 
 
+// while ($row = $stmt->fetch()){
+// 			$row['name'] = filter_input(INPUT_POST, 'login-name');
+// 			var_dump($row['name']);
+// 		}
+
+if(empty($error)){
+	
 
 
 
@@ -108,8 +123,10 @@ if (filter_input(INPUT_POST, 'login-name') && filter_input(INPUT_POST, 'mail') &
 		$stmt->execute();
 
 		
-		header('Location: completion.php');
-		exit();
+			header('Location: completion.php');
+			exit();
+		
+		
 		
 
 	} catch (Exception $e) {
@@ -118,7 +135,7 @@ if (filter_input(INPUT_POST, 'login-name') && filter_input(INPUT_POST, 'mail') &
 
 }
 }
-
+}
 if (isset($_SESSION['user_id'])){
 	header('Location: index.php');
 }else{
