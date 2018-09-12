@@ -32,6 +32,8 @@ if (is_uploaded_file($_FILES['image']['tmp_name'])){
 
 	
 
+}else {
+	$file = "";
 }
 
 if (isset($_POST['title']) && isset($_POST['body'])){
@@ -40,6 +42,8 @@ $image = $file;
 $title = $_POST['title'];
 $body = $_POST['body'];
 $user_id = $_SESSION['user_id'];
+
+
 
 
 	$dsn = 'mysql:host=localhost;dbname=bbs;charset=utf8';

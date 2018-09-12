@@ -66,11 +66,12 @@ if (filter_input(INPUT_POST, 'login-name') && filter_input(INPUT_POST, 'mail') &
 	$mail = filter_input(INPUT_POST, 'mail');
 	$passwords = filter_input(INPUT_POST, 'passwords');
 	$hash = password_hash($passwords, PASSWORD_DEFAULT);
-	
+	$_SESSION['password'] = $hash;
 	$dsn = 'mysql:host=localhost;dbname=bbs;charset=utf8';
 	$user = 'root';
 	$pass = 'root';
 
+exit();
 	try {
 		$db = new PDO($dsn, $user, $pass);
 		$db->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
@@ -111,7 +112,7 @@ if (filter_input(INPUT_POST, 'login-name') && filter_input(INPUT_POST, 'mail') &
 			$stmt->bindParam(':meil',$mail,PDO::PARAM_STR);
 			$stmt->bindParam(':password',$hash,PDO::PARAM_STR);
 			$stmt->execute();
-			
+				
 				header('Location: completion.php');
 				exit();
 
@@ -142,6 +143,8 @@ if (isset($_SESSION['user_id'])){
 		$stmt->bindParam(':name',$loginName, PDO::PARAM_STR);
 		$stmt->bindParam(':password',$password,PDO::PARAM_STR);
 		$stmt->execute();
+		$_SESSION['password'] = $_POST['password'];
+		$_SESSION['name'] = $_POST['logname'];
 		while($row = $stmt->fetch()){
 
 

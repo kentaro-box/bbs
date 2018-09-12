@@ -1,5 +1,6 @@
 <?php 
 session_start();
+ini_set( 'display_errors', 1 );
 if (!isset($_SESSION['user_id'])){
 	header('Location: login.php');
 }
@@ -8,14 +9,21 @@ if (!isset($_SESSION['user_id'])){
  ?>
 
  <?php require('header.php'); ?>
- 	<form action="write.php" method="post">
+ <h2 class="post-title">投稿する</h2>
+ <div class="post">
+ 	<form action="write.php" method="post" enctype="multipart/form-data">
  		
  		<p>タイトル</p>
- 		<p><input type="text" name="title"></p>
+ 		<p><input type="text" name="title" value=" <?php if(isset($_POST['title'])){echo $_POST['title'];} ?>"></p>
  		<p>本文</p>
- 		<p><textarea name="body"></textarea></p>
- 		<p>投稿する</p>
- 		<p><input type="submit" name="send"></p>
+ 		<p><textarea name="body" value=" <?php echo $_POST['body']; ?>"></textarea></p>
+ 		<input type="hidden" name="password" value="<?php echo $_POST['password']; ?>">
+ 		<p>画像をつける</p>
+ 		<!-- <input type="hidden" name="MAX_FILE_SIZE" value="300000" /> -->
+ 		<p><input type="file" name="image"></p>
+ 		<p><input type="submit" name="send" value="投稿する"></p>
  	</form>
+
+ </div>
  </body>
  </html>
