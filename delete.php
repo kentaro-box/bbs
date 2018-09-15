@@ -28,20 +28,20 @@ if (isset($_POST['del'])){
 		$stmt->bindParam(':password',$password,PDO::PARAM_STR);
 		$stmt->execute();
 
-		$row = $stmt->fetch();
+		while($row = $stmt->fetch()){
 
 
-		
 		$dbinner_pass = $row['password'];
 
 
-			if (password_verify($password, $dbinner_pass)) {
+			if (password_verify($_POST['password'], $dbinner_pass)) {
 								 $ok = "照合成功";
 							// 	  header('Location: index.php');
 							// exit();
 							} else {
 								$unknow_pass = "パスワードが違います。";
 							}
+}
 
 		
 
