@@ -1,15 +1,13 @@
 <?php  
 ini_set( 'display_errors', 1 );
 error_reporting(E_ALL);
-
 session_start();
-
 
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 	if (filter_input(INPUT_POST, 'login-name')){
-		$name = $_POST['login-name'];
+		$name = htmlspecialchars($_POST['login-name'], ENT_QUOTES, "UTF-8");
 	}else {
 		if (filter_input(INPUT_POST, 'logname') || filter_input(INPUT_POST, 'password')){
 		$error_name = "";
@@ -20,7 +18,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 	
 
 	if (filter_input(INPUT_POST, 'mail')){
-		$mail = $_POST['mail'];
+		$mail = htmlspecialchars($_POST['mail'], ENT_QUOTES, "UTF-8");
 	}else {
 		if (filter_input(INPUT_POST, 'logname') || filter_input(INPUT_POST, 'password')){
 		$error_mail = "";
@@ -40,7 +38,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 	}
 
 	if (filter_input(INPUT_POST, 'logname')){
-		$logname = $_POST['logname'];
+		$logname = htmlspecialchars($_POST['logname'], ENT_QUOTES, "UTF-8");
 	}else {
 		if (filter_input(INPUT_POST, 'login-name') || filter_input(INPUT_POST, 'mail') || filter_input(INPUT_POST, 'passwords')){
 		$error_logname = "";
@@ -50,7 +48,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 	}
 
 	if (filter_input(INPUT_POST, 'password')){
-		$logname = $_POST['password'];
+		$logname = htmlspecialchars($_POST['password'], ENT_QUOTES, "UTF-8");
 	}else {
 		if (filter_input(INPUT_POST, 'login-name') || filter_input(INPUT_POST, 'mail') || filter_input(INPUT_POST, 'passwords')){
 		$error_password = "";
@@ -68,10 +66,10 @@ if (filter_input(INPUT_POST, 'login-name') && filter_input(INPUT_POST, 'mail') &
 	$hash = password_hash($passwords, PASSWORD_DEFAULT);
 	$_SESSION['password'] = $hash;
 	$dsn = 'mysql:host=localhost;dbname=bbs;charset=utf8';
-	$user = 'root';
-	$pass = 'root';
+	$user = 'bbs';
+	$pass = 'bbs';
 
-exit();
+
 	try {
 		$db = new PDO($dsn, $user, $pass);
 		$db->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
@@ -89,8 +87,8 @@ exit();
 			if ($samename === $row['name']) {
 				$error = "すでに登録済みの名前です。";
 
-				// header('Location: login.php');
-				// exit();
+				header('Location: login.php');
+				exit();
 			}
 		}
 		
@@ -127,12 +125,12 @@ if (isset($_SESSION['user_id'])){
 	header('Location: index.php');
 }else{
 	if (!empty($_POST['logname']) && !empty($_POST['password'])){
-	$loginName = $_POST['logname'];
-	$post_password = $_POST['password'];
+	$loginName = htmlspecialchars($_POST['logname'], ENT_QUOTES, "UTF-8");
+	$post_password = htmlspecialchars($_POST['password'], ENT_QUOTES, "UTF-8");
 	
 	$dsn = 'mysql:host=localhost;dbname=bbs;charset=utf8';
-	$user = 'root';
-	$pass = 'root';
+	$user = 'bbs';
+	$pass = 'bbs';
 
 	try {
 		$db = new PDO($dsn, $user, $pass);
@@ -143,14 +141,11 @@ if (isset($_SESSION['user_id'])){
 		$stmt->bindParam(':name',$loginName, PDO::PARAM_STR);
 		$stmt->bindParam(':password',$password,PDO::PARAM_STR);
 		$stmt->execute();
-		$_SESSION['password'] = $_POST['password'];
-		$_SESSION['name'] = $_POST['logname'];
+		$_SESSION['password'] = htmlspecialchars($_POST['password'], ENT_QUOTES, "UTF-8");
+		$_SESSION['name'] = htmlspecialchars($_POST['logname'], ENT_QUOTES, "UTF-8");
 		while($row = $stmt->fetch()){
 
-
-		
 		$dbinner_pass = $row['password'];
-
 
 			if (password_verify($_POST['password'], $dbinner_pass)) {
 								  $_SESSION['user_id'] = $row['user_id'];
@@ -160,11 +155,6 @@ if (isset($_SESSION['user_id'])){
 								$unapproved = "名前またはパスワードが違います。";
 							}
 		}
-
-
-						
-		
-	
 	} catch (Exception $e) {
 		echo $e->getMessage();
 }
@@ -179,11 +169,11 @@ if (isset($_SESSION['user_id'])){
 		<form action="" method="post">
 			<p>お名前<span><?php if(isset($error_logname)){ echo $error_logname;} ?></span></p>
 			<p><input type="text" name="logname" value="<?php if(isset($_POST['logname'])){
-				echo htmlspecialchars($_POST['logname']);
+				echo htmlspecialchars($_POST['logname'], ENT_QUOTES, "UTF-8");
 			} ?>"></p>
 			<p>パスワード<span><?php if(isset($error_password)){ echo $error_password;} ?></span></p>
 			<p><input type="password" name="password" value="<?php if(isset($_POST['password'])){
-				echo htmlspecialchars($_POST['password']);
+				echo htmlspecialchars($_POST['password'], ENT_QUOTES, "UTF-8");
 			} ?>"></p>
 			
 			<p><input type="submit" value="ログイン"></p>
@@ -193,11 +183,11 @@ if (isset($_SESSION['user_id'])){
 	<div class="new-entry">
 		<form action="" method="post">
 			<p>お名前 <span><?php if(isset($error_name)){ echo $error_name;} ?><?php if(isset($error)){ echo $error;} ?></span></p>
-			<p><input type="text" name="login-name"  value="<?php if(isset($_POST['login-name'])){echo htmlspecialchars($_POST['login-name']);} ?>"></p>
+			<p><input type="text" name="login-name"  value="<?php if(isset($_POST['login-name'])){echo htmlspecialchars($_POST['login-name'], ENT_QUOTES, "UTF-8");} ?>"></p>
 			<p>メールアドレス<span><?php if(isset($error_mail)){ echo $error_mail;} ?></span></p>
-			<p><input type="text" name="mail" value="<?php if(isset($_POST['mail'])){echo htmlspecialchars($_POST['mail']);} ?>"></p>
+			<p><input type="text" name="mail" value="<?php if(isset($_POST['mail'])){echo htmlspecialchars($_POST['mail'], ENT_QUOTES, "UTF-8");} ?>"></p>
 			<p>パスワード<span><?php if(isset($error_passwords)){ echo $error_passwords;} ?></span></p>
-			<p><input type="password" name="passwords" <?php if(isset($_POST['passwords'])){echo htmlspecialchars($_POST['passwords']);} ?>></p>
+			<p><input type="password" name="passwords" <?php if(isset($_POST['passwords'])){echo htmlspecialchars($_POST['passwords'], ENT_QUOTES, "UTF-8");} ?>></p>
 			
 			<p><input type="submit" value="登録"></p>
 		</form>

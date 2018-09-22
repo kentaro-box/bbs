@@ -19,18 +19,11 @@ if (is_uploaded_file($_FILES['image']['tmp_name'])){
 
     	}
     } else {
-    	
-
-    	
+    	   	
     	header('Location: post.php');
     	exit();
     }
-	
-
-
-
-
-	
+		
 
 }else {
 	$file = "";
@@ -39,16 +32,16 @@ if (is_uploaded_file($_FILES['image']['tmp_name'])){
 if (isset($_POST['title']) && isset($_POST['body'])){
 
 $image = $file;
-$title = $_POST['title'];
-$body = $_POST['body'];
+$title = htmlspecialchars($_POST['title'], ENT_QUOTES, "UTF-8");
+$body = htmlspecialchars($_POST['body'], ENT_QUOTES, "UTF-8");
 $user_id = $_SESSION['user_id'];
 
 
 
 
 	$dsn = 'mysql:host=localhost;dbname=bbs;charset=utf8';
-	$user = 'root';
-	$pass = 'root';
+	$user = 'bbs';
+	$pass = 'bbs';
 
 	try {
 		$db = new PDO($dsn, $user, $pass);
@@ -73,15 +66,3 @@ $user_id = $_SESSION['user_id'];
 		echo $e->$getMessage();
 	}
 }
-
-?>
-<!DOCTYPE html>
-<html>
-<head>
-	<title></title>
-</head>
-<body>
-
-</form>
-</body>
-</html>

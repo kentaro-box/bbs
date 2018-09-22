@@ -8,8 +8,8 @@ if (!isset($_SESSION['user_id'])){
  
 
 	$dsn = 'mysql:host=localhost;dbname=bbs;charset=utf8';
-	$user = 'root';
-	$pass = 'root';
+	$user = 'bbs';
+	$pass = 'bbs';
 
 	try {
 		$db = new PDO($dsn, $user, $pass);
@@ -40,10 +40,6 @@ if (!isset($_SESSION['user_id'])){
 		echo $e->getMessage();
 	}
 
-
-	$dsn = 'mysql:host=localhost;dbname=bbs;charset=utf8';
-	$user = 'root';
-	$pass = 'root';
 
 	try {
 		$db = new PDO($dsn, $user, $pass);
@@ -77,18 +73,18 @@ if (!isset($_SESSION['user_id'])){
 <?php while ($row = $stmt->fetch()):
 	
 		$title = $row['title'] ? $row['title'] : '(無題)';
-			
+		$row['body'] = htmlspecialchars($row['body'], ENT_QUOTES, "UTF-8");
 ?>
 <div class="post-colum">
 	<div class="post-grid">
 	<div class="grid-left">
 		
 		<p>名前</p>
-		<p class="stand-out"><?php echo $row['name']; ?></p>
+		<p class="stand-out"><?php echo htmlspecialchars($row['name'], ENT_QUOTES, "UTF-8"); ?></p>
 		<p>タイトル</p>
-		<p class="stand-out"><?php echo $title; ?></p>
+		<p class="stand-out"><?php echo htmlspecialchars($title, ENT_QUOTES, "UTF-8"); ?></p>
 		<p>投稿日</p>
-		<p class="stand-out"><?php echo $row['date'] ;?></p>
+		<p class="stand-out"><?php echo htmlspecialchars($row['date'], ENT_QUOTES, "UTF-8") ;?></p>
 		<p>投稿文</p>
 		<p class="stand-out"><?php echo nl2br($row['body']);?></p>
 	</div>
@@ -98,10 +94,9 @@ if (!isset($_SESSION['user_id'])){
 <?php endif; ?>
 	</div>
 	</div>
-<?php  ?>
 <div class="delete-form">
 <form action="delete.php" method="post">
-	<input type="hidden" name="post_id" value="<?php echo $row['post_id']; ?>">
+	<input type="hidden" name="post_id" value="<?php echo htmlspecialchars($row['post_id'], ENT_QUOTES, "UTF-8"); ?>">
 	<input type="submit" value="投稿削除">
 </form>
 </div>
@@ -111,30 +106,26 @@ if (!isset($_SESSION['user_id'])){
 	<?php if ($row['post_id'] === $rowa['post_id']): ?>
 		<div class="comment-inner">
 		<p>名前</p>	
-		<p class="comment-p"><?php echo $rowa['c_name']; ?></p>
+		<p class="comment-p"><?php echo htmlspecialchars($rowa['c_name'], ENT_QUOTES, "UTF-8"); ?></p>
 		<p>コメント</p>
-		<p class="comment-p"><?php echo $rowa['c_body'] ; ?></p>
+		<p class="comment-p"><?php echo $rowa['c_body']; ?></p>
 		</div>
-<?php else: ?>
-<?php break; ?>
+	<?php else: ?>
+	<?php break; ?>
 
-<?php endif; ?>
+	<?php endif; ?>
 
 <?php endwhile; ?>
 </div>
 <div class="comment-form">
 <form action="comment.php" method="post">
 	<p>コメントする</p>
-	<p><input type="hidden" name="post_id" value="<?php echo $row['post_id'];?>" ></p>
-	<p><input type="text" name="c_body" value="<?php echo @$_POST['c_body']; ?>"></p>
+	<p><input type="hidden" name="post_id" value="<?php echo htmlspecialchars($row['post_id'], ENT_QUOTES, "UTF-8");?>" ></p>
+	<p><input type="text" name="c_body" value="<?php echo htmlspecialchars(@$_POST['c_body'], ENT_QUOTES, "UTF-8"); ?>"></p>
 	<input type="submit" name="comment" value="送信">
 </form>
 </div>
 	
-
-	
-
-
 </div>
 <?php endwhile; ?>
 
